@@ -6,6 +6,7 @@ export default defineConfig({
       // implement node event listeners here
     },
     baseUrl: 'http://localhost:3000',
+    // Remove the experimentalSkipDomainInjection property
   },
   component: {
     devServer: {
@@ -13,4 +14,9 @@ export default defineConfig({
       bundler: 'webpack',
     },
   },
+  // Add this to bypass server check
+  retries: {
+    runMode: 2,
+    openMode: 0
+  }
 });
