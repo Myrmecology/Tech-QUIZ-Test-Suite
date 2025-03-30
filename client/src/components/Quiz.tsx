@@ -1,4 +1,4 @@
-import { useState, } from 'react';
+import { useState } from 'react';
 import type { Question } from '../models/Question.js';
 import { getQuestions } from '../services/questionApi.js';
 
@@ -8,18 +8,22 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizStarted, setQuizStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getRandomQuestions = async () => {
     try {
       const questions = await getQuestions();
+      console.log('Received questions:', questions); // Debug the response
 
-      if (!questions) {
-        throw new Error('something went wrong!');
+      if (!questions || questions.length === 0) {
+        throw new Error('No questions received!');
       }
 
       setQuestions(questions);
+      return true;
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching questions:', err);
+      return false;
     }
   };
 
@@ -37,11 +41,24 @@ const Quiz = () => {
   };
 
   const handleStartQuiz = async () => {
-    await getRandomQuestions();
-    setQuizStarted(true);
-    setQuizCompleted(false);
-    setScore(0);
-    setCurrentQuestionIndex(0);
+    try {
+      setIsLoading(true);
+      setQuizStarted(true);
+      setQuizCompleted(false);
+      setScore(0);
+      setCurrentQuestionIndex(0);
+      
+      const success = await getRandomQuestions();
+      
+      if (!success) {
+        setQuizStarted(false);
+      }
+    } catch (error) {
+      console.error('Error starting quiz:', error);
+      setQuizStarted(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!quizStarted) {
@@ -50,6 +67,16 @@ const Quiz = () => {
         <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
           Start Quiz
         </button>
+      </div>
+    );
+  }
+
+  if (isLoading || questions.length === 0) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
@@ -64,16 +91,6 @@ const Quiz = () => {
         <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
           Take New Quiz
         </button>
-      </div>
-    );
-  }
-
-  if (questions.length === 0) {
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
       </div>
     );
   }
