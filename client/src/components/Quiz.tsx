@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Question } from '../models/Question.js';
 import { getQuestions } from '../services/questionApi.js';
 
@@ -9,20 +9,29 @@ const Quiz = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizStarted, setQuizStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const getRandomQuestions = async () => {
     try {
-      const questions = await getQuestions();
-      console.log('Received questions:', questions); // Debug the response
+      console.log('Fetching questions...');
+      const fetchedQuestions = await getQuestions();
+      console.log('API Response:', fetchedQuestions);
 
-      if (!questions || questions.length === 0) {
-        throw new Error('No questions received!');
+      if (!fetchedQuestions || fetchedQuestions.length === 0) {
+        console.error('No questions received or empty array');
+        setError('No questions received from the server');
+        return false;
       }
 
-      setQuestions(questions);
+      // Check if the questions have the expected structure
+      const firstQuestion = fetchedQuestions[0];
+      console.log('First question structure:', firstQuestion);
+      
+      setQuestions(fetchedQuestions);
       return true;
     } catch (err) {
-      console.error('Error fetching questions:', err);
+      console.error('Error in getRandomQuestions:', err);
+      setError('Failed to fetch questions: ' + (err instanceof Error ? err.message : String(err)));
       return false;
     }
   };
@@ -43,23 +52,48 @@ const Quiz = () => {
   const handleStartQuiz = async () => {
     try {
       setIsLoading(true);
-      setQuizStarted(true);
+      setError(null);
       setQuizCompleted(false);
       setScore(0);
       setCurrentQuestionIndex(0);
       
+      console.log('Starting quiz...');
       const success = await getRandomQuestions();
+      console.log('Fetching questions result:', success);
       
-      if (!success) {
-        setQuizStarted(false);
+      if (success) {
+        setQuizStarted(true);
+      } else {
+        console.error('Failed to start quiz: getRandomQuestions returned false');
       }
     } catch (error) {
-      console.error('Error starting quiz:', error);
-      setQuizStarted(false);
+      console.error('Exception in handleStartQuiz:', error);
+      setError('Error starting quiz: ' + (error instanceof Error ? error.message : String(error)));
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 text-center">
+        <div className="alert alert-danger">{error}</div>
+        <button className="btn btn-primary d-inline-block mx-auto" onClick={() => setError(null)}>
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   if (!quizStarted) {
     return (
@@ -67,16 +101,6 @@ const Quiz = () => {
         <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
           Start Quiz
         </button>
-      </div>
-    );
-  }
-
-  if (isLoading || questions.length === 0) {
-    return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
       </div>
     );
   }
@@ -95,7 +119,19 @@ const Quiz = () => {
     );
   }
 
+  if (questions.length === 0) {
+    return (
+      <div className="p-4 text-center">
+        <div className="alert alert-warning">No questions available. Please try again.</div>
+        <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   const currentQuestion = questions[currentQuestionIndex];
+  console.log('Rendering question:', currentQuestion);
 
   return (
     <div className='card p-4'>
