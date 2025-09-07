@@ -27,3 +27,197 @@ dist-ssr
 .env
 .env.EXAMPLE
 
+# ============================================
+# YUBIKEY & CRYPTOGRAPHIC SECURITY SECTION
+# ============================================
+
+# YubiKey Configuration & Management
+.ykman/
+.yubico/
+yubico-manager.ini
+*.ykr
+*.yksecret
+*yubikey*backup*
+.yubikey/
+
+# Hardware Security Module / Smart Card
+*.pkcs11
+*.p11
+*.hsm
+opensc.conf
+.opensc/
+.piv/
+.pkcs11/
+
+# SSH Keys (All Formats)
+id_rsa
+id_rsa.*
+id_dsa
+id_dsa.*
+id_ecdsa
+id_ecdsa.*
+id_ed25519
+id_ed25519.*
+id_ecdsa_sk
+id_ecdsa_sk.*
+id_ed25519_sk
+id_ed25519_sk.*
+*.ssh
+*.sshkey
+authorized_keys
+authorized_keys.*
+known_hosts.old
+ssh_host_*_key
+ssh_host_*_key.pub
+
+# GPG/PGP Keys & Configuration
+*.gpg
+*.pgp
+*.asc
+*.key
+*.secret
+*.private
+*.priv
+secring.*
+pubring.*
+trustdb.gpg
+random_seed
+.gnupg/
+gpg-agent.conf
+private-keys-v1.d/
+openpgp-revocs.d/
+crls.d/
+.gpg-v21-migrated
+
+# PKCS/Certificate Files
+*.p12
+*.pfx
+*.p7b
+*.p7c
+*.p7r
+*.p8
+*.p8e
+*.pem
+*.crt
+*.cer
+*.der
+*.ca
+*.csr
+*.srl
+*.crl
+*.bundle
+*.cert
+*.certificate
+
+# Keystore Files
+*.jks
+*.keystore
+*.truststore
+*.kdb
+*.kdbx
+*.storepass
+*.keypass
+cacerts
+
+# PIV/CAC/Smart Card
+*.piv
+.piv-cache/
+piv-tool.conf
+
+# FIDO2/WebAuthn
+*.fido2
+*.webauthn
+*.ctap
+.fido/
+
+# Authentication Tokens & Secrets
+*.token
+*.secrets
+*_token
+*_secret
+*.apikey
+*.api_key
+*.auth
+*.credential*
+*.password*
+.credentials/
+.secrets/
+.password-store/
+
+# AWS/Cloud Provider Keys
+.aws/credentials
+.aws/config
+aws_access_key_id
+aws_secret_access_key
+.boto
+.s3cfg
+.fog
+
+# Azure
+.azure/
+*.publishsettings
+*.azureProfile
+
+# GCP
+.gcloud/
+gcloud/
+*.json.keyfile
+service-account-key.json
+gcp-key.json
+
+# Encryption Keys & Materials
+*.enc
+*.encrypted
+*.aes
+*.des
+*.rsa
+*.dsa
+*.ecdsa
+master.key
+encryption.key
+*.keyring
+*.keytab
+*.k
+
+# Temporary Security Files
+*.tmp.key
+*.temp.key
+*.backup.key
+*.old.key
+*~.key
+.#*key*
+
+# macOS Keychain
+*.keychain
+*.keychain-db
+login.keychain*
+
+# Windows Security
+*.pvk
+*.spc
+*.p7s
+Thumbs.db:encryptable
+
+# Certificate Signing
+*.req
+*.crt.pem
+*.key.pem
+ca-bundle.crt
+ca-certificates.crt
+
+# OTP/2FA Secrets
+*.otpauth
+*.2fa
+.google_authenticator
+.otp_secrets
+*.totp
+
+# Session Files
+*.session
+session_key*
+.sessions/
+
+# Agent Sockets
+agent.*
+agent-*
+S.gpg-agent*
