@@ -1,5 +1,7 @@
 # Tech Quiz Test Suite
 
+For a video demo of this project please visit: https://www.youtube.com/watch?v=HTUQ2IV8SSw
+
 ## Overview
 
 This project extends a functional MERN-stack Tech Quiz application with comprehensive testing capabilities using Cypress. The implementation includes both component-level tests and end-to-end integration tests to ensure application reliability and maintainability.
@@ -152,7 +154,7 @@ During the development of this testing suite, particular attention was paid to:
 
 ## Video Demonstration
 
-A video walkthrough of the application and testing implementation is available https://www.youtube.com/watch?v=hAIg8vmaSuk&t=5s
+https://www.youtube.com/watch?v=HTUQ2IV8SSw
 
 ## Acknowledgments
 
